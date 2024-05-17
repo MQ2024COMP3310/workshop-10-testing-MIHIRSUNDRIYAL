@@ -35,8 +35,12 @@ class TestWebApp(unittest.TestCase):
         assert response.status_code == 200
 
     def test_no_access_to_profile(self):
-        # TODO: Check that non-logged-in user should be redirected to /login
-        assert False
+        # Attempt to access the profile page
+        response = self.client.get('/profile', follow_redirects=True) # GET request to the profile end point
+        # Check if the response redirects to the login page
+        self.assertEqual(response.status_code, 302)  # 302 indicates a redirect
+        self.assertIn('/login', response.headers['Location'])
+        assert True
 
     def test_register_user(self):
         response = self.client.post('/signup', data = {
